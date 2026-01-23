@@ -217,7 +217,7 @@ void opcontrol() {
     // . . .
     // Put more user control code here!
     // . . .
-
+    setIntake(master.get_digital(DIGITAL_R1) * 127 + master.get_digital(DIGITAL_R2)*127);
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }
 }
