@@ -374,6 +374,7 @@ void measure_offsets() {
 
 void pushback_auton() {
   
-  chassis.pid_drive_set(12_in, DRIVE_SPEED, true);
-
+  chassis.pid_drive_set(24_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+  
 }
