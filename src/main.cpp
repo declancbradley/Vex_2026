@@ -9,7 +9,7 @@ ez::Drive chassis(
 
     15,      // IMU Port (inertial sensor, crucial)
     4.125,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
-    343);   // Wheel RPM = cartridge * (motor gear / wheel gear)
+    200);   // Wheel RPM = cartridge * (motor gear / wheel gear)
 
 
 void initialize() {
@@ -24,26 +24,10 @@ void initialize() {
   // Set the drive to your own constants from autons.cpp!
   default_constants();
 
-  // These are already defaulted to these buttons, but you can change the left/right curve buttons here!
-  // chassis.opcontrol_curve_buttons_left_set(pros::E_CONTROLLER_DIGITAL_LEFT, pros::E_CONTROLLER_DIGITAL_RIGHT);  // If using tank, only the left side is used.
-  // chassis.opcontrol_curve_buttons_right_set(pros::E_CONTROLLER_DIGITAL_Y, pros::E_CONTROLLER_DIGITAL_A);
-
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
       {"Drive\n\nDrive forward and come back", drive_example},
-      {"Turn\n\nTurn 3 times.", turn_example},
-      {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
-      {"Drive and Turn\n\nSlow down during drive", wait_until_change_speed},
-      {"Swing Turn\n\nSwing in an 'S' curve", swing_example},
-      {"Motion Chaining\n\nDrive forward, turn, and come back, but blend everything together :D", motion_chaining},
-      {"Combine all 3 movements", combining_movements},
-      {"Interference\n\nAfter driving forward, robot performs differently if interfered or not", interfered_example},
-      {"Simple Odom\n\nThis is the same as the drive example, but it uses odom instead!", odom_drive_example},
-      {"Pure Pursuit\n\nGo to (0, 30) and pass through (6, 10) on the way.  Come back to (0, 0)", odom_pure_pursuit_example},
-      {"Pure Pursuit Wait Until\n\nGo to (24, 24) but start running an intake once the robot passes (12, 24)", odom_pure_pursuit_wait_until_example},
-      {"Boomerang\n\nGo to (0, 24, 45) then come back to (0, 0, 0)", odom_boomerang_example},
-      {"Boomerang Pure Pursuit\n\nGo to (0, 24, 45) on the way to (24, 24) then come back to (0, 0, 0)", odom_boomerang_injected_pure_pursuit_example},
-      {"Measure Offsets\n\nThis will turn the robot a bunch of times and calculate your offsets for your tracking wheels.", measure_offsets},
+      {"Pushback\n\nUse for competitions", pushback_auton},
   });
 
   // Initialize chassis and auton selector
@@ -63,13 +47,7 @@ void disabled() {
 
 /**
  * Runs after initialize(), and before autonomous when connected to the Field
- * Management System or the VEX Competition Switch. This is intended for
- * competition-specific initialization routines, such as an autonomous selector
- * on the LCD.
- *
- * This task will exit when the robot is enabled and autonomous or opcontrol
- * starts.
- */
+ **/
 void competition_initialize() {
   // . . .
 }
@@ -80,13 +58,6 @@ void autonomous() {
   chassis.drive_sensor_reset();               // Reset drive sensors to 0
   chassis.odom_xyt_set(0_in, 0_in, 0_deg);    // Set the current position, you can start at a specific position with this
   chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
-
-  /*
-  To keep results consistent without tracking wheels:
-   - avoid wheel slip
-   - avoid wheelies
-   - avoid throwing momentum around (super harsh turns, like in the example below)
-  */
 
   ez::as::auton_selector.selected_auton_call();  // Calls selected auton from autonomous selector
 }
@@ -122,11 +93,8 @@ void ez_screen_task() {
 pros::Task ezScreenTask(ez_screen_task);
 
 /**
- * Gives you some extras to run in your opcontrol:
- * - run your autonomous routine in opcontrol by pressing DOWN and B
- *   - to prevent this from accidentally happening at a competition, this
- *     is only enabled when you're not connected to competition control.
- * - gives you a GUI to change your PID values live by pressing X
+ * - open PID tuner by pressing X in opcontrol
+ * - run autonomous by pressing DOWN+B together in opcontrol
  */
 void ez_template_extras() {
   // Only run this when not connected to a competition switch
@@ -147,11 +115,9 @@ void ez_template_extras() {
       autonomous();
       chassis.drive_brake_set(preference);
     }
-
     // Allow PID Tuner to iterate
     chassis.pid_tuner_iterate();
   }
-
   // Disable PID Tuner when connected to a comp switch
   else {
     if (chassis.pid_tuner_enabled())
@@ -166,18 +132,16 @@ void ez_template_extras() {
 void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
+  // track the state of the pneumatic pistons, false = retracted
+  bool gateState = false;
+  bool rodState = false;
 
   while (true) {
     // Gives you some extras to make EZ-Template ezier
     ez_template_extras();
-
-    // chassis.opcontrol_tank();  // Tank control
     chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
-    // chassis.opcontrol_arcade_standard(ez::SINGLE);  // Standard single arcade
-    // chassis.opcontrol_arcade_flipped(ez::SPLIT);    // Flipped split arcade
-    // chassis.opcontrol_arcade_flipped(ez::SINGLE);   // Flipped single arcade
 
-    // intake controls
+    // INTAKE CONTROLS: L1/2
     if(master.get_digital(DIGITAL_L1)){
       setIntake(127);
     }
@@ -187,7 +151,7 @@ void opcontrol() {
     else{
       setIntake(0);
     }
-    // conveyor controls
+    // CONVEYOR CONTROLS: R1/2
     if(master.get_digital(DIGITAL_R1)){
       setConveyor(127);
     }
@@ -196,6 +160,17 @@ void opcontrol() {
     }
     else{
       setConveyor(0);
+    }
+
+    // --- Pneumatic Gate (Scooping from Matchloader) --- UP BUTTON
+    if(master.get_digital_new_press(DIGITAL_UP)) {
+      gateState = !gateState;
+      pneumaticGate.set_value(gateState);
+    }
+    // --- Pneumatic Rod (Cleaving through scoring tubes) --- LEFT BUTTON
+    if(master.get_digital_new_press(DIGITAL_LEFT)) {
+      rodState = !rodState;
+      pneumaticRod.set_value(rodState);
     }
 
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
