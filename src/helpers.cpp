@@ -6,7 +6,7 @@ void setIntake(int intakePower){
     intake.move(intakePower);
 }
 void setConveyor(int conveyorPower){
-    intake.move(conveyorPower);
+    conveyor.move(conveyorPower);
 }
 void setIntakeAndConveyor(int combinedPower){
     intakeAndConveyor.move(combinedPower);
