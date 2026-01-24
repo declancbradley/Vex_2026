@@ -26,8 +26,7 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"Drive\n\nDrive forward and come back", drive_example},
-      {"Pushback\n\nUse for competitions", pushback_auton},
+    {"Pushback\n\nUse for competitions", pushback_auton},  
   });
 
   // Initialize chassis and auton selector
