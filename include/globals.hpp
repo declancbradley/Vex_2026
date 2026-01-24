@@ -1,5 +1,7 @@
 #include "main.h"
+// point to things defined in the globals.cpp file
 
 //motors
-pros::Motor intake(0);
-pros::MotorGroup intakeGroup({1, 2});
+extern pros::Motor intake;
+extern pros::Motor conveyor;
+extern pros::MotorGroup intakeAndConveyor;
