@@ -372,9 +372,20 @@ void measure_offsets() {
 // Make your own autonomous functions here!
 // . . .
 
+// 2.5 seconds roughly for conveyor to take it to the top
+
 void pushback_auton() {
   
-  chassis.pid_drive_set(24_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(21_in, DRIVE_SPEED);
+  setIntake(127);
   chassis.pid_wait();
-  
+  pros::delay(500);
+  setIntake(0);
+  chassis.pid_drive_set(-31_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  setIntake(127);
+  setConveyor(127);
+  pros::delay(2700);
+  setIntake(0);
+  setConveyor(0);
 }
