@@ -132,8 +132,8 @@ void opcontrol() {
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
   // track the state of the pneumatic pistons, false = retracted
-  bool gateState = false;
-  bool rodState = false;
+  bool gateState = true;
+  bool rodState = true;
 
   while (true) {
     // Gives you some extras to make EZ-Template ezier
