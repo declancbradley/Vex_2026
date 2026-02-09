@@ -389,3 +389,7 @@ void pushback_auton() {
   setIntake(0);
   setConveyor(0);
 }
+
+void skills_auton() {
+  
+}
