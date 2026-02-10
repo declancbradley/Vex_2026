@@ -168,7 +168,7 @@ void opcontrol() {
       pneumaticGate.set_value(gateState);
     }
     // --- Pneumatic Rod (Cleaving through scoring tubes) --- LEFT BUTTON
-    if(master.get_digital_new_press(DIGITAL_LEFT)) {
+    if(master.get_digital_new_press(DIGITAL_DOWN)) {
       rodState = !rodState;
       pneumaticRod.set_value(rodState);
     }

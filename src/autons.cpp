@@ -389,6 +389,10 @@ void match_auton() {
   setConveyor(0);
 }
 
+// chassis.odom_odom_set({{24_in, 24_in}, fwd, 110}, true); <<< odometry coordinate example, traveling
+//  to (24,24) with 110 (out of 127) speed and slew turned on (true)
+// chassis.pid_odom_set(24_in, 110, true); <<< same command, but using distance rather than corrdinates
+
 void skills_auton() {
   
   chassis.pid_targets_reset();                // Resets PID targets to 0
@@ -397,6 +401,6 @@ void skills_auton() {
   chassis.odom_xyt_set(0_in, 0_in, 0_deg);    // Set the current position, you can start at a specific position with this
   chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
 
-  chassis.pid_odom_set(24_in, 110);   // speed is 0 to 127
+  chassis.pid_odom_set(24_in, 110, true);
   chassis.pid_wait();
 }
