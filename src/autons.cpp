@@ -376,12 +376,12 @@ void measure_offsets() {
 
 void pushback_auton() {
   
-  chassis.pid_drive_set(21_in, DRIVE_SPEED);
+  chassis.pid_odom_set(21_in, DRIVE_SPEED);
   setIntake(127);
   chassis.pid_wait();
   pros::delay(500);
   setIntake(0);
-  chassis.pid_drive_set(-31_in, DRIVE_SPEED);
+  chassis.pid_odom_set(-31_in, DRIVE_SPEED);
   chassis.pid_wait();
   setIntake(127);
   setConveyor(127);
