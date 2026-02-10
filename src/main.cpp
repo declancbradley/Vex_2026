@@ -26,8 +26,8 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-    {"Match\n\nUse for competitions", match_auton}, 
-    {"Auton Skills\n\nUse for competitions", skills_auton}  
+    Auton("Match\n\nUse for competitions", match_auton),
+    Auton("Auton Skills\n\nUse for competitions", skills_auton)
   });
 
   // Initialize chassis and auton selector
