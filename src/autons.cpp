@@ -397,4 +397,79 @@ void skills_auton() {
   
   chassis.pid_odom_set(24_in, 110, true);
   chassis.pid_wait();
+
+  // start at Position C at bottom right corner of red parking zone, 45 deg between forward and right
+  // STEP A: rotate 45 deg clockwise to face straight, travel to blue-top matchloader and get blocks
+  chassis.pid_turn_set(45_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_odom_set(27_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_odom_set(12_in, DRIVE_SPEED);
+  setIntake(127);
+  chassis.pid_wait();
+  pros::delay(500);
+  setIntake(0);
+
+  // STEP B: back up, travel to the opposite end of the side goal
+  chassis.pid_odom_set(-12_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_odom_set(-12_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_odom_set(120_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_odom_set(12_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_odom_set(-12_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  // STEP C: unload red balls into the opposite end of the side goal
+  setIntake(127);
+  setConveyor(127);
+  pros::delay(2700);
+  setIntake(0);
+  setConveyor(0);
+
+  // STEP D: drive to the nearby matchloader and get blue balls
+  chassis.pid_odom_set(28_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  setIntake(127);
+  pros::delay(500);
+  setIntake(0);
+
+  // STEP E: drive back to the red-territory side of the side-goal (identical to step B)
+  chassis.pid_odom_set(-12_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_odom_set(-12_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_odom_set(120_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_odom_set(12_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_odom_set(-12_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  // STEP F: unload blue balls into the red-territory side of the side-goal
+  setIntake(127);
+  setConveyor(127);
+  pros::delay(2700);
+  setIntake(0);
+  setConveyor(0);
 }
