@@ -404,15 +404,19 @@ void pid_simple_skills_auton() {
   chassis.pid_wait();
   chassis.pid_turn_set(90, TURN_SPEED);
   chassis.pid_wait();
-  chassis.pid_drive_set(11.36, INTAKE_SPEED); //figure out how to stop even if exact distance doesn't get reached
   setIntake(127);
+  setConveyor(127);
+  pneumaticGate.set_value(true);
+  chassis.pid_drive_set(11.36, INTAKE_SPEED); //figure out how to stop even if exact distance doesn't get reached
   chassis.pid_wait();
   pros::delay(MATCHLOADER_TIME);
   setIntake(0);
-  
+  setConveyor(0);
+
   // STEP B: back up, travel to the opposite end of the side goal
   chassis.pid_drive_set(-11.36, DRIVE_SPEED);
   chassis.pid_wait();
+  pneumaticGate.set_value(false);
   chassis.pid_turn_set(-90, TURN_SPEED);
   chassis.pid_wait();
   chassis.pid_drive_set(12_in, DRIVE_SPEED);
@@ -431,24 +435,28 @@ void pid_simple_skills_auton() {
   chassis.pid_wait();
 
   // STEP C: unload red balls into the opposite end of the side goal
-  setIntake(127);
-  setConveyor(127);
+  setIntake(-127);
+  setConveyor(-127);
   pros::delay(LONG_UNLOAD_TIME);
   setIntake(0);
   setConveyor(0);
 
   // STEP D: drive to the nearby matchloader and get blue balls
+  setIntake(127);
+  setConveyor(127);
+  pneumaticGate.set_value(true);
   chassis.pid_drive_set(25.7, INTAKE_SPEED);
   chassis.pid_wait();
-  setIntake(127);
   pros::delay(MATCHLOADER_TIME);
   setIntake(0);
+  setConveyor(0);
 
   //STEP E: Unload into long goal
   chassis.pid_drive_set(-25.7, DRIVE_SPEED);
   chassis.pid_wait();
-  setIntake(127);
-  setConveyor(127);
+  pneumaticGate.set_value(false);
+  setIntake(-127);
+  setConveyor(-127);
   pros::delay(LONG_UNLOAD_TIME);
   setIntake(0);
   setConveyor(0);
@@ -477,11 +485,15 @@ void odom_simple_skills_auton() {
   chassis.pid_wait();
   chassis.pid_turn_set({0, 23.44}, fwd, TURN_SPEED);
   chassis.pid_wait();
-  chassis.pid_odom_set(11.36, INTAKE_SPEED); //figure out how to stop even if exact distance doesn't get reached
   setIntake(127);
+  setConveyor(127);
+  pneumaticGate.set_value(true);
+  chassis.pid_odom_set(11.36, INTAKE_SPEED); //figure out how to stop even if exact distance doesn't get reached
   chassis.pid_wait();
   pros::delay(MATCHLOADER_TIME);
   setIntake(0);
+  setConveyor(0);
+  pneumaticGate.set_value(false);
   
   // STEP B: back up, travel to the opposite end of the side goal
   chassis.pid_odom_set(-11.36, DRIVE_SPEED);
@@ -498,22 +510,26 @@ void odom_simple_skills_auton() {
   chassis.pid_wait();
 
   // STEP C: unload red balls into the opposite end of the side goal
-  setIntake(127);
-  setConveyor(127);
+  setIntake(-127);
+  setConveyor(-127);
   pros::delay(LONG_UNLOAD_TIME);
   setIntake(0);
   setConveyor(0);
 
   // STEP D: drive to the nearby matchloader and get blue balls
+  setIntake(127);
+  setConveyor(127);
+  pneumaticGate.set_value(true);
   chassis.pid_odom_set({{138.81, 23.44}, fwd, INTAKE_SPEED});
   chassis.pid_wait();
-  setIntake(127);
   pros::delay(MATCHLOADER_TIME);
   setIntake(0);
+  setConveyor(0);
 
   //STEP E: Unload into long goal
   chassis.pid_odom_set(-25.7, DRIVE_SPEED);
   chassis.pid_wait();
+  pneumaticGate.set_value(false);
   setIntake(127);
   setConveyor(127);
   pros::delay(LONG_UNLOAD_TIME);

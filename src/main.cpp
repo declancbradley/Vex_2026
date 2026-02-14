@@ -59,7 +59,8 @@ void autonomous() {
   chassis.drive_sensor_reset();               // Reset drive sensors to 0
   chassis.odom_xyt_set(22.36, 69.77, -90.0); // Set the current position, you can start at a specific position with this
   chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
-
+  pneumaticRod.set_value(false);
+  pneumaticGate.set_value(false);
   ez::as::auton_selector.selected_auton_call();  // Calls selected auton from autonomous selector
 }
 
