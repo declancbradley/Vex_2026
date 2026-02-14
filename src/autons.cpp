@@ -2,7 +2,7 @@
 
 // These are out of 127
 const int DRIVE_SPEED = 110;
-const int INTAKE_SPEED = 50;
+const int INTAKE_SPEED = 30;
 const int TURN_SPEED = 90;
 const int SWING_SPEED = 110;
 
@@ -401,18 +401,18 @@ void skills_auton() {
 
   // start at Position C at bottom right corner of red parking zone, 45 deg between forward and right
   // STEP A: rotate 45 deg clockwise to face straight, travel to blue-top matchloader and get blocks
-  chassis.pid_turn_set(45_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_odom_set(27_in, DRIVE_SPEED);
+  //chassis.pid_turn_set(45_deg, TURN_SPEED);
+  //chassis.pid_wait();
+  chassis.pid_odom_set(24_in, DRIVE_SPEED);
   chassis.pid_wait();
   chassis.pid_turn_set(90_deg, TURN_SPEED);
   chassis.pid_wait();
-  chassis.pid_odom_set(12_in, INTAKE_SPEED);
+  chassis.pid_odom_set(6_in, INTAKE_SPEED);
   setIntake(127);
   chassis.pid_wait();
   pros::delay(500);
   setIntake(0);
-
+  /*
   // STEP B: back up, travel to the opposite end of the side goal
   chassis.pid_odom_set(-12_in, DRIVE_SPEED);
   chassis.pid_wait();
@@ -473,4 +473,5 @@ void skills_auton() {
   pros::delay(2700);
   setIntake(0);
   setConveyor(0);
+  */
 }
