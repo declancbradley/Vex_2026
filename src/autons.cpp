@@ -393,12 +393,6 @@ void match_auton() {
 }
 
 void pid_simple_skills_auton() {
-  chassis.pid_targets_reset();                // Resets PID targets to 0
-  chassis.drive_imu_reset();                  // Reset gyro position to 0
-  chassis.drive_sensor_reset();               // Reset drive sensors to 0
-  chassis.odom_xyt_set(22.36, 69.77, -90.0);   // Set the current position, you can start at a specific position with this
-  chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
-
   // start at top right corner of red parking zone, facing to the right
   // STEP A: travel to blue-top matchloader and get blocks
   chassis.pid_drive_set(28.33, DRIVE_SPEED);
@@ -472,12 +466,6 @@ void pid_simple_skills_auton() {
 }
 
 void odom_simple_skills_auton() {
-  chassis.pid_targets_reset();                // Resets PID targets to 0
-  chassis.drive_imu_reset();                  // Reset gyro position to 0
-  chassis.drive_sensor_reset();               // Reset drive sensors to 0
-  chassis.odom_xyt_set(22.36, 69.77, -90.0);   // Set the current position, you can start at a specific position with this
-  chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
-
   // start at top right corner of red parking zone, facing to the right
   // STEP A: travel to blue-top matchloader and get blocks
   chassis.pid_odom_set({{22.36, 23.44}, fwd, DRIVE_SPEED});
