@@ -11,6 +11,8 @@ ez::Drive chassis(
     3.25,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
     200);   // Wheel RPM = cartridge * (motor gear / wheel gear)
 
+bool gate_state = true;
+bool rod_state = true;
 
 void initialize() {
   
@@ -34,6 +36,8 @@ void initialize() {
   // Initialize chassis and auton selector
   chassis.initialize();
   ez::as::initialize();
+  pneumaticGate.set_value(gate_state);
+  pneumaticRod.set_value(rod_state);
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
 }
 
@@ -44,6 +48,8 @@ void initialize() {
  */
 void disabled() {
   // . . .
+  pneumaticGate.set_value(gate_state);
+  pneumaticRod.set_value(rod_state);
 }
 
 /**
@@ -51,6 +57,8 @@ void disabled() {
  **/
 void competition_initialize() {
   // . . .
+  pneumaticGate.set_value(gate_state);
+  pneumaticRod.set_value(rod_state);
 }
 
 void autonomous() {
@@ -59,8 +67,8 @@ void autonomous() {
   chassis.drive_sensor_reset();               // Reset drive sensors to 0
   chassis.odom_xyt_set(22.36, 69.77, -90.0); // Set the current position, you can start at a specific position with this
   chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
-  pneumaticRod.set_value(false);
-  pneumaticGate.set_value(false);
+  pneumaticGate.set_value(gate_state);
+  pneumaticRod.set_value(rod_state);
   ez::as::auton_selector.selected_auton_call();  // Calls selected auton from autonomous selector
 }
 

@@ -4,7 +4,7 @@
 const int DRIVE_SPEED = 110;
 const int TURN_SPEED = 90;
 const int SWING_SPEED = 110;
-const int INTAKE_SPEED = 30;
+const int INTAKE_SPEED = 60;
 const int MATCHLOADER_TIME = 5000;
 const int LONG_UNLOAD_TIME = 5000;
 
@@ -383,16 +383,26 @@ void bad_auton() {
 }
 
 void match_auton() {
-  chassis.pid_odom_set(21_in, DRIVE_SPEED);
-  setIntake(127);
+  chassis.pid_drive_set(31.5, DRIVE_SPEED);
   chassis.pid_wait();
+  chassis.pid_turn_set(0, TURN_SPEED);
+  chassis.pid_wait();
+  pneumaticGate.set_value(false);
   pros::delay(500);
-  setIntake(0);
-  chassis.pid_odom_set(-31_in, DRIVE_SPEED);
-  chassis.pid_wait();
   setIntake(127);
   setConveyor(127);
-  pros::delay(2700);
+  chassis.pid_drive_set(11.36, INTAKE_SPEED); //figure out how to stop even if exact distance doesn't get reached
+  chassis.pid_wait();
+  pros::delay(MATCHLOADER_TIME);
+  setIntake(0);
+  setConveyor(0);
+
+  chassis.pid_drive_set(-21, DRIVE_SPEED);
+  chassis.pid_wait();
+  pneumaticGate.set_value(true);
+  setIntake(127);
+  setConveyor(127);
+  pros::delay(LONG_UNLOAD_TIME);
   setIntake(0);
   setConveyor(0);
 }
@@ -400,13 +410,14 @@ void match_auton() {
 void pid_simple_skills_auton() {
   // start at top right corner of red parking zone, facing to the right
   // STEP A: travel to blue-top matchloader and get blocks
-  chassis.pid_drive_set(28.33, DRIVE_SPEED);
+  chassis.pid_drive_set(31.5, DRIVE_SPEED);
   chassis.pid_wait();
-  chassis.pid_turn_set(90, TURN_SPEED);
+  chassis.pid_turn_set(0, TURN_SPEED);
   chassis.pid_wait();
+  pneumaticGate.set_value(false);
+  pros::delay(500);
   setIntake(127);
   setConveyor(127);
-  pneumaticGate.set_value(true);
   chassis.pid_drive_set(11.36, INTAKE_SPEED); //figure out how to stop even if exact distance doesn't get reached
   chassis.pid_wait();
   pros::delay(MATCHLOADER_TIME);
@@ -416,7 +427,7 @@ void pid_simple_skills_auton() {
   // STEP B: back up, travel to the opposite end of the side goal
   chassis.pid_drive_set(-11.36, DRIVE_SPEED);
   chassis.pid_wait();
-  pneumaticGate.set_value(false);
+  pneumaticGate.set_value(true);
   chassis.pid_turn_set(-90, TURN_SPEED);
   chassis.pid_wait();
   chassis.pid_drive_set(12_in, DRIVE_SPEED);
