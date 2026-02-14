@@ -2,9 +2,11 @@
 
 // These are out of 127
 const int DRIVE_SPEED = 110;
-const int INTAKE_SPEED = 30;
 const int TURN_SPEED = 90;
 const int SWING_SPEED = 110;
+const int INTAKE_SPEED = 30;
+const int MATCHLOADER_TIME = 5000;
+const int LONG_UNLOAD_TIME = 5000;
 
 ///
 // Constants
@@ -390,19 +392,160 @@ void match_auton() {
   setConveyor(0);
 }
 
+void pid_simple_skills_auton() {
+  chassis.pid_targets_reset();                // Resets PID targets to 0
+  chassis.drive_imu_reset();                  // Reset gyro position to 0
+  chassis.drive_sensor_reset();               // Reset drive sensors to 0
+  chassis.odom_xyt_set(22.36, 69.77, -90.0);   // Set the current position, you can start at a specific position with this
+  chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
+
+  // start at top right corner of red parking zone, facing to the right
+  // STEP A: travel to blue-top matchloader and get blocks
+  chassis.pid_drive_set(28.33, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(90, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(11.36, INTAKE_SPEED); //figure out how to stop even if exact distance doesn't get reached
+  setIntake(127);
+  chassis.pid_wait();
+  pros::delay(MATCHLOADER_TIME);
+  setIntake(0);
+  
+  // STEP B: back up, travel to the opposite end of the side goal
+  chassis.pid_drive_set(-11.36, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(-90, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(12_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(96_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(12_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(-15_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  // STEP C: unload red balls into the opposite end of the side goal
+  setIntake(127);
+  setConveyor(127);
+  pros::delay(LONG_UNLOAD_TIME);
+  setIntake(0);
+  setConveyor(0);
+
+  // STEP D: drive to the nearby matchloader and get blue balls
+  chassis.pid_drive_set(25.7, INTAKE_SPEED);
+  chassis.pid_wait();
+  setIntake(127);
+  pros::delay(MATCHLOADER_TIME);
+  setIntake(0);
+
+  //STEP E: Unload into long goal
+  chassis.pid_drive_set(-25.7, DRIVE_SPEED);
+  chassis.pid_wait();
+  setIntake(127);
+  setConveyor(127);
+  pros::delay(LONG_UNLOAD_TIME);
+  setIntake(0);
+  setConveyor(0);
+
+  // STEP E: Park in red zone
+  chassis.pid_drive_set(-5, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(18_in, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(100.19, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(30, DRIVE_SPEED);
+  chassis.pid_wait();
+}
+
+void odom_simple_skills_auton() {
+  chassis.pid_targets_reset();                // Resets PID targets to 0
+  chassis.drive_imu_reset();                  // Reset gyro position to 0
+  chassis.drive_sensor_reset();               // Reset drive sensors to 0
+  chassis.odom_xyt_set(22.36, 69.77, -90.0);   // Set the current position, you can start at a specific position with this
+  chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
+
+  // start at top right corner of red parking zone, facing to the right
+  // STEP A: travel to blue-top matchloader and get blocks
+  chassis.pid_odom_set({{22.36, 23.44}, fwd, DRIVE_SPEED});
+  chassis.pid_wait();
+  chassis.pid_turn_set({0, 23.44}, fwd, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_odom_set(11.36, INTAKE_SPEED); //figure out how to stop even if exact distance doesn't get reached
+  setIntake(127);
+  chassis.pid_wait();
+  pros::delay(MATCHLOADER_TIME);
+  setIntake(0);
+  
+  // STEP B: back up, travel to the opposite end of the side goal
+  chassis.pid_odom_set(-11.36, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set({22.36, 0}, fwd, TURN_SPEED);
+  chassis.pid_odom_set({{{46, 8, 0}, fwd, DRIVE_SPEED},
+                      {{94, 8, 0}, fwd, DRIVE_SPEED},
+                      {{120, 23.44, 90}, fwd, DRIVE_SPEED}},
+                      true);
+  chassis.pid_wait();
+  chassis.pid_turn_set({0, 23.44}, rev, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_odom_set(-15_in, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  // STEP C: unload red balls into the opposite end of the side goal
+  setIntake(127);
+  setConveyor(127);
+  pros::delay(LONG_UNLOAD_TIME);
+  setIntake(0);
+  setConveyor(0);
+
+  // STEP D: drive to the nearby matchloader and get blue balls
+  chassis.pid_odom_set({{138.81, 23.44}, fwd, INTAKE_SPEED});
+  chassis.pid_wait();
+  setIntake(127);
+  pros::delay(MATCHLOADER_TIME);
+  setIntake(0);
+
+  //STEP E: Unload into long goal
+  chassis.pid_odom_set(-25.7, DRIVE_SPEED);
+  chassis.pid_wait();
+  setIntake(127);
+  setConveyor(127);
+  pros::delay(LONG_UNLOAD_TIME);
+  setIntake(0);
+  setConveyor(0);
+
+  // STEP E: Park in red zone
+  chassis.pid_odom_set(5, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_odom_set({{{36, 70, 180}, fwd, DRIVE_SPEED},
+                      {{8.43, 72, 90}, fwd, DRIVE_SPEED}},
+                      true);
+  chassis.pid_wait();
+}
+
 // chassis.odom_odom_set({{24_in, 24_in}, fwd, 110}, true); <<< odometry coordinate example, traveling
 //  to (24,24) with 110 (out of 127) speed and slew turned on (true)
 // chassis.pid_odom_set(24_in, 110, true); <<< same command, but using distance rather than corrdinates
 
-void skills_auton() {
-  
-  //chassis.pid_odom_set(24_in, 110, true);
-  //chassis.pid_wait();
+void prev_skills_auton() {
 
   // start at Position C at bottom right corner of red parking zone, 45 deg between forward and right
   // STEP A: rotate 45 deg clockwise to face straight, travel to blue-top matchloader and get blocks
-  //chassis.pid_turn_set(45_deg, TURN_SPEED);
-  //chassis.pid_wait();
+  chassis.pid_turn_set(45_deg, TURN_SPEED);
+  chassis.pid_wait();
   chassis.pid_odom_set(24_in, DRIVE_SPEED);
   chassis.pid_wait();
   chassis.pid_turn_set(90_deg, TURN_SPEED);
@@ -412,7 +555,7 @@ void skills_auton() {
   chassis.pid_wait();
   pros::delay(500);
   setIntake(0);
-  /*
+  
   // STEP B: back up, travel to the opposite end of the side goal
   chassis.pid_odom_set(-12_in, DRIVE_SPEED);
   chassis.pid_wait();
@@ -473,5 +616,5 @@ void skills_auton() {
   pros::delay(2700);
   setIntake(0);
   setConveyor(0);
-  */
+  
 }
