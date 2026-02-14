@@ -17,5 +17,8 @@ void odom_boomerang_example();
 void odom_boomerang_injected_pure_pursuit_example();
 void measure_offsets();
 
+void bad_auton();
 void match_auton();
-void skills_auton();
+void pid_simple_skills_auton();
+void odom_simple_skills_auton();
+void prev_skills_auton();
