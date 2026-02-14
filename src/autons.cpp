@@ -446,8 +446,8 @@ void pid_simple_skills_auton() {
   chassis.pid_wait();
 
   // STEP C: unload red balls into the opposite end of the side goal
-  setIntake(-127);
-  setConveyor(-127);
+  setIntake(127);
+  setConveyor(127);
   pros::delay(LONG_UNLOAD_TIME);
   setIntake(0);
   setConveyor(0);
@@ -466,8 +466,8 @@ void pid_simple_skills_auton() {
   chassis.pid_drive_set(-25.7, DRIVE_SPEED);
   chassis.pid_wait();
   pneumaticGate.set_value(false);
-  setIntake(-127);
-  setConveyor(-127);
+  setIntake(127);
+  setConveyor(127);
   pros::delay(LONG_UNLOAD_TIME);
   setIntake(0);
   setConveyor(0);
