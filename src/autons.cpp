@@ -4,7 +4,7 @@
 const int DRIVE_SPEED = 110;
 const int TURN_SPEED = 90;
 const int SWING_SPEED = 110;
-const int INTAKE_SPEED = 60;
+const int INTAKE_SPEED = 80;
 const int MATCHLOADER_TIME = 5000;
 const int LONG_UNLOAD_TIME = 5000;
 
@@ -380,6 +380,14 @@ void measure_offsets() {
 void bad_auton() {
   chassis.pid_drive_set(24_in, DRIVE_SPEED);
   chassis.pid_wait();
+}
+
+void park_auton() {
+  setIntake(127);
+  setConveyor(127);
+  pros::delay(10000);
+  setIntake(0);
+  setConveyor(0);
 }
 
 void match_auton() {
