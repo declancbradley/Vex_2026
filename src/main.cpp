@@ -29,6 +29,7 @@ void initialize() {
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
     Auton("Match\n\nUse for competitions", bad_auton),
+    Auton("New Match\n\nUse for competitions", match_auton),
     Auton("PID Auton Skills\n\nUse for competitions", pid_simple_skills_auton),
     Auton("Odom Auton Skills\n\nUse for competitions", odom_simple_skills_auton),
   });
