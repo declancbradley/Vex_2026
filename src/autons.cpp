@@ -390,6 +390,19 @@ void park_auton() {
   setConveyor(0);
 }
 
+void matchload_auton() {
+  chassis.pid_drive_set(31.5, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(0, TURN_SPEED);
+  chassis.pid_drive_set(-21, DRIVE_SPEED);
+  chassis.pid_wait();
+  setIntake(127);
+  setConveyor(127);
+  pros::delay(LONG_UNLOAD_TIME);
+  setIntake(0);
+  setConveyor(0);
+}
+
 void match_auton() {
   chassis.pid_drive_set(31.5, DRIVE_SPEED);
   chassis.pid_wait();

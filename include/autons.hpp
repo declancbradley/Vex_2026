@@ -18,6 +18,7 @@ void odom_boomerang_injected_pure_pursuit_example();
 void measure_offsets();
 
 void bad_auton();
+void matchloader_auton();
 void park_auton();
 void match_auton();
 void pid_simple_skills_auton();
