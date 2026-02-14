@@ -388,7 +388,7 @@ void match_auton() {
   chassis.pid_turn_set(0, TURN_SPEED);
   chassis.pid_wait();
   pneumaticGate.set_value(false);
-  pros::delay(500);
+  pros::delay(200);
   setIntake(127);
   setConveyor(127);
   chassis.pid_drive_set(11.36, INTAKE_SPEED); //figure out how to stop even if exact distance doesn't get reached
@@ -432,15 +432,15 @@ void pid_simple_skills_auton() {
   chassis.pid_wait();
   chassis.pid_drive_set(12_in, DRIVE_SPEED);
   chassis.pid_wait();
-  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_turn_set(-180_deg, TURN_SPEED);
   chassis.pid_wait();
   chassis.pid_drive_set(96_in, DRIVE_SPEED);
   chassis.pid_wait();
-  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_turn_set(-270_deg, TURN_SPEED);
   chassis.pid_wait();
   chassis.pid_drive_set(12_in, DRIVE_SPEED);
   chassis.pid_wait();
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_turn_set(0_deg, TURN_SPEED);
   chassis.pid_wait();
   chassis.pid_drive_set(-15_in, DRIVE_SPEED);
   chassis.pid_wait();
@@ -453,9 +453,10 @@ void pid_simple_skills_auton() {
   setConveyor(0);
 
   // STEP D: drive to the nearby matchloader and get blue balls
+  pneumaticGate.set_value(true);
+  pros::delay(200);
   setIntake(127);
   setConveyor(127);
-  pneumaticGate.set_value(true);
   chassis.pid_drive_set(25.7, INTAKE_SPEED);
   chassis.pid_wait();
   pros::delay(MATCHLOADER_TIME);
@@ -475,11 +476,11 @@ void pid_simple_skills_auton() {
   // STEP E: Park in red zone
   chassis.pid_drive_set(-5, DRIVE_SPEED);
   chassis.pid_wait();
-  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_turn_set(90_deg, TURN_SPEED);
   chassis.pid_wait();
   chassis.pid_drive_set(18_in, DRIVE_SPEED);
   chassis.pid_wait();
-  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_turn_set(0_deg, TURN_SPEED);
   chassis.pid_wait();
   chassis.pid_drive_set(100.19, DRIVE_SPEED);
   chassis.pid_wait();
