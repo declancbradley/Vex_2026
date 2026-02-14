@@ -28,10 +28,10 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-    Auton("Only Matchloader\n\nUse for competitions", matchload_auton),
+    Auton("Left Only Matchloader\n\nUse for competitions", left_matchload_auton),
+    Auton("Right Only Matchloader\n\nUse for competitions", right_matchload_auton),
     Auton("Full Match\n\nUse for competitions", match_auton),
     Auton("Match\n\nUse for competitions", bad_auton),
-    Auton("Park Auton Skills\n\nUse for competitions", park_auton),
     Auton("PID Auton Skills\n\nUse for competitions", pid_simple_skills_auton),
     Auton("Odom Auton Skills\n\nUse for competitions", odom_simple_skills_auton)
   });
