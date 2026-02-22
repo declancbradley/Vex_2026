@@ -385,7 +385,7 @@ void bad_auton() {
 void park_auton() {
   setIntake(127);
   setConveyor(127);
-  pros::delay(10000);
+  pros::delay(1000);
   setIntake(0);
   setConveyor(0);
 }
