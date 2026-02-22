@@ -393,7 +393,7 @@ void park_auton() {
 void right_matchload_auton() {
   chassis.pid_drive_set(34, DRIVE_SPEED);
   chassis.pid_wait();
-  chassis.pid_turn_set(0, TURN_SPEED);
+  chassis.pid_turn_set(0, TURN_SPEED); //absolute angle
   chassis.pid_drive_set(-21, DRIVE_SPEED-15);
   chassis.pid_wait();
   setIntake(127);
