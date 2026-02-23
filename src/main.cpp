@@ -68,7 +68,7 @@ void autonomous() {
   chassis.pid_targets_reset();                // Resets PID targets to 0
   chassis.drive_imu_reset();                  // Reset gyro position to 0
   chassis.drive_sensor_reset();               // Reset drive sensors to 0
-  chassis.odom_xyt_set(22.36, 69.77, -90.0); // Set the current position, you can start at a specific position with this
+  chassis.odom_xyt_set(22.36, 69.77, -90.0); // Need to modify starting position for left vs right match auton
   chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
   pneumaticGate.set_value(gate_state);
   pneumaticRod.set_value(rod_state);
