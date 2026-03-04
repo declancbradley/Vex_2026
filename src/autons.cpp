@@ -371,26 +371,20 @@ void measure_offsets() {
   if (chassis.odom_tracker_front != nullptr) chassis.odom_tracker_front->distance_to_center_set(f_offset);
 }
 
-// . . .
-// Make your own autonomous functions here!
-// . . .
+// ###############################################################
+// ###############################################################
+// ###############################################################
+// ###############################################################
 
-// 2.5 seconds roughly for conveyor to take it to the top
+// CUSTOM AUTONS GO HERE
 
+// Use this when nothing else works. The bot simply moves forward 1 square.
 void bad_auton() {
   chassis.pid_drive_set(24_in, DRIVE_SPEED);
   chassis.pid_wait();
 }
-
-void park_auton() {
-  setIntake(127);
-  setConveyor(127);
-  pros::delay(1000);
-  setIntake(0);
-  setConveyor(0);
-}
-
-void right_matchload_auton() {
+// travel to right red sidegoal and score the one preload block
+void right_preload_auton() {
   chassis.pid_drive_set(34, DRIVE_SPEED);
   chassis.pid_wait();
   chassis.pid_turn_set(0, TURN_SPEED); //absolute angle
@@ -403,7 +397,8 @@ void right_matchload_auton() {
   setConveyor(0);
 }
 
-void left_matchload_auton() {
+// travel to left red sidegoal and score the one preload block
+void left_preload_auton() {
   chassis.pid_drive_set(34, DRIVE_SPEED);
   chassis.pid_wait();
   chassis.pid_turn_set(180, TURN_SPEED);
@@ -416,21 +411,37 @@ void left_matchload_auton() {
   setConveyor(0);
 }
 
+// travel to right red matchloader, load, then score at nearby sidegoal
+void right_matchload_auton() {
+  
+}
+
+// travel to left red matchloader, load, then score at nearby sidegoal
+void left_matchload_auton() {
+
+}
+
+// use for full match: travel to ____ red matchloader, load, then score at nearby sidegoal
 void match_auton() {
+  
+  // travel from starting position to matchloader
   chassis.pid_drive_set(31.5, DRIVE_SPEED);
   chassis.pid_wait();
   chassis.pid_turn_set(0, TURN_SPEED);
   chassis.pid_wait();
   pneumaticGate.set_value(false);
   pros::delay(200);
+  
+  // intake
   setIntake(127);
   setConveyor(127);
-  chassis.pid_drive_set(11.36, INTAKE_SPEED); //figure out how to stop even if exact distance doesn't get reached
+  chassis.pid_drive_set(11.36, INTAKE_SPEED);
   chassis.pid_wait();
   pros::delay(MATCHLOADER_TIME);
   setIntake(0);
   setConveyor(0);
 
+  // travel from matchloader to sidegoal
   chassis.pid_drive_set(-21, DRIVE_SPEED);
   chassis.pid_wait();
   pneumaticGate.set_value(true);
@@ -441,6 +452,8 @@ void match_auton() {
   setConveyor(0);
 }
 
+// Use for full skills: travel to blue-top matchloader on blue's side, return to red's side to score at sidegoal, 
+//    load from nearby red-top matchloader and score again, then park
 void pid_simple_skills_auton() {
   // start at top right corner of red parking zone, facing to the right
   // STEP A: travel to blue-top matchloader and get blocks
@@ -524,6 +537,7 @@ void pid_simple_skills_auton() {
   chassis.pid_wait();
 }
 
+// Currently not in use due to complications
 void odom_simple_skills_auton() {
   // start at top right corner of red parking zone, facing to the right
   // STEP A: travel to blue-top matchloader and get blocks
@@ -595,6 +609,7 @@ void odom_simple_skills_auton() {
 //  to (24,24) with 110 (out of 127) speed and slew turned on (true)
 // chassis.pid_odom_set(24_in, 110, true); <<< same command, but using distance rather than corrdinates
 
+// outdated skills routine
 void prev_skills_auton() {
 
   // start at Position C at bottom right corner of red parking zone, 45 deg between forward and right
