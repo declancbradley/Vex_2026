@@ -34,7 +34,7 @@ void initialize() {
     Auton("Right Only Matchload\n\nUse for match", right_matchload_auton),
     Auton("PID Auton Skills\n\nUse for skills", pid_simple_skills_auton),
     Auton("Move Forward Once\n\nUse as last resort", bad_auton),
-    //Auton("Full Match\n\nUse for match", match_auton),
+    //Auton("Full Match\n\nUse for match", prev_match_auton),
     //Auton("Odom Auton Skills\n\nUse for skills", odom_simple_skills_auton),
   });
 

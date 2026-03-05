@@ -562,6 +562,11 @@ void prev_match_auton() {
   setConveyor(0);
 }
 
+// ###############################################################
+// ###############################################################
+// ###############################################################
+// ###############################################################
+
 // CUSTOM AUTONS IN USE
 
 // Use this when nothing else works. The bot simply moves forward 1 square.
@@ -672,7 +677,7 @@ void pid_simple_skills_auton() {
   // start at top right corner of red parking zone, facing to the right
   chassis.odom_xyt_set(22.36, 69.77, -90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
   
-  // STEP A: travel to blue-top matchloader and get blocks
+  // STEP A: travel to nearby blue-top matchloader and get blocks
   chassis.pid_drive_set(31.5, DRIVE_SPEED);
   chassis.pid_wait();
   chassis.pid_turn_set(180, TURN_SPEED);
