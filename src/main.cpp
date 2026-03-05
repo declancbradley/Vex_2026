@@ -30,9 +30,9 @@ void initialize() {
   ez::as::auton_selector.autons_add({
     Auton("Left Only Preload\n\nOnly scores the preload block", left_preload_auton),
     Auton("Right Only Preload\n\nOnly scores the preload block", right_preload_auton),
-    Auton("Left Only Matchload\n\nIntakes from matchloader and scores at sidegoal", left_matchload_auton),
-    Auton("Right Only Matchload\n\nIntakes from matchloader and scores at sidegoal", right_matchload_auton),
-    Auton("Full Match\n\nUse for match", match_auton),
+    Auton("Left Only Matchload\n\nUse for match", left_matchload_auton),
+    Auton("Right Only Matchload\n\nUse for match", right_matchload_auton),
+    //Auton("Full Match\n\nUse for match", match_auton),
     Auton("PID Auton Skills\n\nUse for skills", pid_simple_skills_auton),
     //Auton("Odom Auton Skills\n\nUse for skills", odom_simple_skills_auton),
     Auton("Move Forward Once\n\nUse as last resort", bad_auton),

@@ -480,8 +480,8 @@ void left_matchload_auton() {
 
 }
 
-// use for full match: travel to right red matchloader, load, then score at nearby sidegoal
-void match_auton() {
+// old match routine, functionally identical to right_matchload_auton()
+void prev_match_auton() {
   
   // travel from right-corner starting position to matchloader
   chassis.odom_xyt_set(22.36, 69.77, -90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
