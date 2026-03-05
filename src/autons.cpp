@@ -376,230 +376,7 @@ void measure_offsets() {
 // ###############################################################
 // ###############################################################
 
-// CUSTOM AUTONS GO HERE
-
-// Use this when nothing else works. The bot simply moves forward 1 square.
-void bad_auton() {
-  chassis.pid_drive_set(24_in, DRIVE_SPEED);
-  chassis.pid_wait();
-}
-
-// travel to right red sidegoal and score the one preload block
-void right_preload_auton() {
-  chassis.odom_xyt_set(22.36, 69.77, -90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
-  chassis.pid_drive_set(34, DRIVE_SPEED);
-  chassis.pid_wait();
-  chassis.pid_turn_set(180, TURN_SPEED); //absolute angle
-  chassis.pid_drive_set(-21, DRIVE_SPEED-15);
-  chassis.pid_wait();
-  setIntake(127);
-  setConveyor(127);
-  pros::delay(LONG_UNLOAD_TIME);
-  setIntake(0);
-  setConveyor(0);
-}
-
-// travel to left red sidegoal and score the one preload block
-void left_preload_auton() {
-  chassis.odom_xyt_set(22.36, 69.77, 90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
-  chassis.pid_drive_set(34, DRIVE_SPEED);
-  chassis.pid_wait();
-  chassis.pid_turn_set(180, TURN_SPEED);
-  chassis.pid_drive_set(-21, DRIVE_SPEED-15);
-  chassis.pid_wait();
-  setIntake(127);
-  setConveyor(127);
-  pros::delay(LONG_UNLOAD_TIME);
-  setIntake(0);
-  setConveyor(0);
-}
-
-// travel to right red matchloader, load, then score at nearby sidegoal
-void right_matchload_auton() {
-  
-  // start from right corner of the parking zone, travel to nearby matchloader
-  chassis.odom_xyt_set(22.36, 69.77, -90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
-  chassis.pid_drive_set(31.5, DRIVE_SPEED);
-  chassis.pid_wait();
-  chassis.pid_turn_set(180, TURN_SPEED); // face matchloader
-  chassis.pid_wait();
-  pneumaticGate.set_value(false);
-  pros::delay(200);
-
-  // intake
-  setIntake(127);
-  setConveyor(127);
-  chassis.pid_drive_set(11.36, INTAKE_SPEED);
-  chassis.pid_wait();
-  pros::delay(MATCHLOADER_TIME);
-  setIntake(0);
-  setConveyor(0);
-
-  // travel from matchloader to nearby sidegoal, score
-  chassis.pid_drive_set(-21, DRIVE_SPEED);
-  chassis.pid_wait();
-  pneumaticGate.set_value(true);
-  setIntake(127);
-  setConveyor(127);
-  pros::delay(LONG_UNLOAD_TIME);
-  setIntake(0);
-  setConveyor(0);
-
-}
-
-// travel to left red matchloader, load, then score at nearby sidegoal
-void left_matchload_auton() {
-
-  // start from right corner of the parking zone, travel to nearby matchloader
-  chassis.odom_xyt_set(22.36, 69.77, 90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
-  chassis.pid_drive_set(31.5, DRIVE_SPEED);
-  chassis.pid_wait();
-  chassis.pid_turn_set(180, TURN_SPEED); // face matchloader
-  chassis.pid_wait();
-  pneumaticGate.set_value(false);
-  pros::delay(200);
-
-  // intake
-  setIntake(127);
-  setConveyor(127);
-  chassis.pid_drive_set(11.36, INTAKE_SPEED);
-  chassis.pid_wait();
-  pros::delay(MATCHLOADER_TIME);
-  setIntake(0);
-  setConveyor(0);
-
-  // travel from matchloader to nearby sidegoal, score
-  chassis.pid_drive_set(-21, DRIVE_SPEED);
-  chassis.pid_wait();
-  pneumaticGate.set_value(true);
-  setIntake(127);
-  setConveyor(127);
-  pros::delay(LONG_UNLOAD_TIME);
-  setIntake(0);
-  setConveyor(0);
-
-}
-
-// old match routine, functionally identical to right_matchload_auton()
-void prev_match_auton() {
-  
-  // travel from right-corner starting position to matchloader
-  chassis.odom_xyt_set(22.36, 69.77, -90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
-  chassis.pid_drive_set(31.5, DRIVE_SPEED);
-  chassis.pid_wait();
-  chassis.pid_turn_set(180, TURN_SPEED); // face the matchloader
-  chassis.pid_wait();
-  pneumaticGate.set_value(false);
-  pros::delay(200);
-  
-  // intake
-  setIntake(127);
-  setConveyor(127);
-  chassis.pid_drive_set(11.36, INTAKE_SPEED);
-  chassis.pid_wait();
-  pros::delay(MATCHLOADER_TIME);
-  setIntake(0);
-  setConveyor(0);
-
-  // travel from matchloader to sidegoal
-  chassis.pid_drive_set(-21, DRIVE_SPEED);
-  chassis.pid_wait();
-  pneumaticGate.set_value(true);
-  setIntake(127);
-  setConveyor(127);
-  pros::delay(LONG_UNLOAD_TIME);
-  setIntake(0);
-  setConveyor(0);
-}
-
-// Use for full skills: 
-void pid_simple_skills_auton() {
-  
-  // start at top right corner of red parking zone, facing to the right
-  chassis.odom_xyt_set(22.36, 69.77, -90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
-  
-  // STEP A: travel to blue-top matchloader and get blocks
-  chassis.pid_drive_set(31.5, DRIVE_SPEED);
-  chassis.pid_wait();
-  chassis.pid_turn_set(180, TURN_SPEED);
-  chassis.pid_wait();
-  pneumaticGate.set_value(false);
-  pros::delay(200);
-  setIntake(127);
-  setConveyor(127);
-  chassis.pid_drive_set(11.36, INTAKE_SPEED); //figure out how to stop even if exact distance doesn't get reached
-  chassis.pid_wait();
-  pros::delay(MATCHLOADER_TIME);
-  setIntake(0);
-  setConveyor(0);
-
-  // STEP B: back up, travel to the opposite end of the side goal
-  chassis.pid_drive_set(-11.36, DRIVE_SPEED);
-  chassis.pid_wait();
-  pneumaticGate.set_value(true);
-  chassis.pid_turn_set(-90, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(12_in, DRIVE_SPEED); // down
-  chassis.pid_wait();
-  chassis.pid_turn_set(180_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(-96_in, DRIVE_SPEED); // right (from red side to blue side)
-  chassis.pid_wait();
-  chassis.pid_turn_set(-90_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(-12_in, DRIVE_SPEED); // up
-  chassis.pid_wait();
-  chassis.pid_turn_set(0_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(-15_in, DRIVE_SPEED); // left (pressing back against sidegoal)
-  chassis.pid_wait();
-
-  // STEP C: unload red balls into the opposite end of the side goal
-  setIntake(127);
-  setConveyor(127);
-  pros::delay(LONG_UNLOAD_TIME);
-  setIntake(0);
-  setConveyor(0);
-
-  // STEP D: drive to the nearby matchloader and get blue balls
-  pneumaticGate.set_value(false);
-  pros::delay(200);
-  setIntake(127);
-  setConveyor(127);
-  chassis.pid_drive_set(25.7, INTAKE_SPEED);
-  chassis.pid_wait();
-  pros::delay(MATCHLOADER_TIME);
-  setIntake(0);
-  setConveyor(0);
-
-  //STEP E: Unload into long goal
-  chassis.pid_drive_set(-25.7, DRIVE_SPEED);
-  chassis.pid_wait();
-  pneumaticGate.set_value(true);
-  setIntake(127);
-  setConveyor(127);
-  pros::delay(LONG_UNLOAD_TIME);
-  setIntake(0);
-  setConveyor(0);
-
-  // STEP E: Park in red zone
-  chassis.pid_drive_set(5, DRIVE_SPEED); // right
-  chassis.pid_wait();
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(18_in, DRIVE_SPEED); // up
-  chassis.pid_wait();
-  chassis.pid_turn_set(180_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(100.19, DRIVE_SPEED); // left (from blue side to red side)
-  chassis.pid_wait();
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
-  chassis.pid_wait();
-  chassis.pid_drive_set(30, DRIVE_SPEED); // up (entering parking zone)
-  chassis.pid_wait();
-}
-
-
+// CUSTOM AUTONS NOT IN USE
 
 // Currently not in use due to complications
 void odom_simple_skills_auton() {
@@ -751,4 +528,227 @@ void prev_skills_auton() {
   setIntake(0);
   setConveyor(0);
   
+}
+
+// old match routine, functionally identical to right_matchload_auton()
+void prev_match_auton() {
+  
+  // travel from right-corner starting position to matchloader
+  chassis.odom_xyt_set(22.36, 69.77, -90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
+  chassis.pid_drive_set(31.5, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(180, TURN_SPEED); // face the matchloader
+  chassis.pid_wait();
+  pneumaticGate.set_value(false);
+  pros::delay(200);
+  
+  // intake
+  setIntake(127);
+  setConveyor(127);
+  chassis.pid_drive_set(11.36, INTAKE_SPEED);
+  chassis.pid_wait();
+  pros::delay(MATCHLOADER_TIME);
+  setIntake(0);
+  setConveyor(0);
+
+  // travel from matchloader to sidegoal
+  chassis.pid_drive_set(-21, DRIVE_SPEED);
+  chassis.pid_wait();
+  pneumaticGate.set_value(true);
+  setIntake(127);
+  setConveyor(127);
+  pros::delay(LONG_UNLOAD_TIME);
+  setIntake(0);
+  setConveyor(0);
+}
+
+// CUSTOM AUTONS IN USE
+
+// Use this when nothing else works. The bot simply moves forward 1 square.
+void bad_auton() {
+  chassis.pid_drive_set(24_in, DRIVE_SPEED);
+  chassis.pid_wait();
+}
+
+// travel to right red sidegoal and score the one preload block
+void right_preload_auton() {
+  chassis.odom_xyt_set(22.36, 69.77, -90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
+  chassis.pid_drive_set(34, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(180, TURN_SPEED); //absolute angle
+  chassis.pid_drive_set(-21, DRIVE_SPEED-15);
+  chassis.pid_wait();
+  setIntake(127);
+  setConveyor(127);
+  pros::delay(LONG_UNLOAD_TIME);
+  setIntake(0);
+  setConveyor(0);
+}
+
+// travel to left red sidegoal and score the one preload block
+void left_preload_auton() {
+  chassis.odom_xyt_set(22.36, 69.77, 90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
+  chassis.pid_drive_set(34, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(180, TURN_SPEED);
+  chassis.pid_drive_set(-21, DRIVE_SPEED-15);
+  chassis.pid_wait();
+  setIntake(127);
+  setConveyor(127);
+  pros::delay(LONG_UNLOAD_TIME);
+  setIntake(0);
+  setConveyor(0);
+}
+
+// travel to right red matchloader, load, then score at nearby sidegoal
+void right_matchload_auton() {
+  
+  // start from right corner of the parking zone, travel to nearby matchloader
+  chassis.odom_xyt_set(22.36, 69.77, -90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
+  chassis.pid_drive_set(31.5, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(180, TURN_SPEED); // face matchloader
+  chassis.pid_wait();
+  pneumaticGate.set_value(false);
+  pros::delay(200);
+
+  // intake
+  setIntake(127);
+  setConveyor(127);
+  chassis.pid_drive_set(11.36, INTAKE_SPEED);
+  chassis.pid_wait();
+  pros::delay(MATCHLOADER_TIME);
+  setIntake(0);
+  setConveyor(0);
+
+  // travel from matchloader to nearby sidegoal, score
+  chassis.pid_drive_set(-21, DRIVE_SPEED);
+  chassis.pid_wait();
+  pneumaticGate.set_value(true);
+  setIntake(127);
+  setConveyor(127);
+  pros::delay(LONG_UNLOAD_TIME);
+  setIntake(0);
+  setConveyor(0);
+
+}
+
+// travel to left red matchloader, load, then score at nearby sidegoal
+void left_matchload_auton() {
+
+  // start from right corner of the parking zone, travel to nearby matchloader
+  chassis.odom_xyt_set(22.36, 69.77, 90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
+  chassis.pid_drive_set(31.5, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(180, TURN_SPEED); // face matchloader
+  chassis.pid_wait();
+  pneumaticGate.set_value(false);
+  pros::delay(200);
+
+  // intake
+  setIntake(127);
+  setConveyor(127);
+  chassis.pid_drive_set(11.36, INTAKE_SPEED);
+  chassis.pid_wait();
+  pros::delay(MATCHLOADER_TIME);
+  setIntake(0);
+  setConveyor(0);
+
+  // travel from matchloader to nearby sidegoal, score
+  chassis.pid_drive_set(-21, DRIVE_SPEED);
+  chassis.pid_wait();
+  pneumaticGate.set_value(true);
+  setIntake(127);
+  setConveyor(127);
+  pros::delay(LONG_UNLOAD_TIME);
+  setIntake(0);
+  setConveyor(0);
+
+}
+
+// Use for full skills: 
+void pid_simple_skills_auton() {
+  
+  // start at top right corner of red parking zone, facing to the right
+  chassis.odom_xyt_set(22.36, 69.77, -90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
+  
+  // STEP A: travel to blue-top matchloader and get blocks
+  chassis.pid_drive_set(31.5, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(180, TURN_SPEED);
+  chassis.pid_wait();
+  pneumaticGate.set_value(false);
+  pros::delay(200);
+  setIntake(127);
+  setConveyor(127);
+  chassis.pid_drive_set(11.36, INTAKE_SPEED); //figure out how to stop even if exact distance doesn't get reached
+  chassis.pid_wait();
+  pros::delay(MATCHLOADER_TIME);
+  setIntake(0);
+  setConveyor(0);
+
+  // STEP B: back up, travel to the opposite end of the side goal
+  chassis.pid_drive_set(-11.36, DRIVE_SPEED);
+  chassis.pid_wait();
+  pneumaticGate.set_value(true);
+  chassis.pid_turn_set(-90, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(12_in, DRIVE_SPEED); // down
+  chassis.pid_wait();
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(-96_in, DRIVE_SPEED); // right (from red side to blue side)
+  chassis.pid_wait();
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(-12_in, DRIVE_SPEED); // up
+  chassis.pid_wait();
+  chassis.pid_turn_set(0_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(-15_in, DRIVE_SPEED); // left (pressing back against sidegoal)
+  chassis.pid_wait();
+
+  // STEP C: unload red balls into the opposite end of the side goal
+  setIntake(127);
+  setConveyor(127);
+  pros::delay(LONG_UNLOAD_TIME);
+  setIntake(0);
+  setConveyor(0);
+
+  // STEP D: drive to the nearby matchloader and get blue balls
+  pneumaticGate.set_value(false);
+  pros::delay(200);
+  setIntake(127);
+  setConveyor(127);
+  chassis.pid_drive_set(25.7, INTAKE_SPEED);
+  chassis.pid_wait();
+  pros::delay(MATCHLOADER_TIME);
+  setIntake(0);
+  setConveyor(0);
+
+  //STEP E: Unload into long goal
+  chassis.pid_drive_set(-25.7, DRIVE_SPEED);
+  chassis.pid_wait();
+  pneumaticGate.set_value(true);
+  setIntake(127);
+  setConveyor(127);
+  pros::delay(LONG_UNLOAD_TIME);
+  setIntake(0);
+  setConveyor(0);
+
+  // STEP E: Park in red zone
+  chassis.pid_drive_set(5, DRIVE_SPEED); // right
+  chassis.pid_wait();
+  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(18_in, DRIVE_SPEED); // up
+  chassis.pid_wait();
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(100.19, DRIVE_SPEED); // left (from blue side to red side)
+  chassis.pid_wait();
+  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(30, DRIVE_SPEED); // up (entering parking zone)
+  chassis.pid_wait();
 }
