@@ -414,14 +414,70 @@ void left_preload_auton() {
 // travel to right red matchloader, load, then score at nearby sidegoal
 void right_matchload_auton() {
   
+  // start from right corner of the parking zone, travel to nearby matchloader
+  chassis.odom_xyt_set(22.36, 69.77, -90.0); // horizontal line from red parking zone to blue is 0 degrees
+  chassis.pid_drive_set(31.5, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(180, TURN_SPEED); // face matchloader
+  chassis.pid_wait();
+  pneumaticGate.set_value(false);
+  pros::delay(200);
+
+  // intake
+  setIntake(127);
+  setConveyor(127);
+  chassis.pid_drive_set(11.36, INTAKE_SPEED);
+  chassis.pid_wait();
+  pros::delay(MATCHLOADER_TIME);
+  setIntake(0);
+  setConveyor(0);
+
+  // travel from matchloader to nearby sidegoal, score
+  chassis.pid_drive_set(-21, DRIVE_SPEED);
+  chassis.pid_wait();
+  pneumaticGate.set_value(true);
+  setIntake(127);
+  setConveyor(127);
+  pros::delay(LONG_UNLOAD_TIME);
+  setIntake(0);
+  setConveyor(0);
+
 }
 
 // travel to left red matchloader, load, then score at nearby sidegoal
 void left_matchload_auton() {
 
+  // start from right corner of the parking zone, travel to nearby matchloader
+  chassis.odom_xyt_set(22.36, 69.77, 90.0); // horizontal line from red parking zone to blue is 0 degrees
+  chassis.pid_drive_set(31.5, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(180, TURN_SPEED); // face matchloader
+  chassis.pid_wait();
+  pneumaticGate.set_value(false);
+  pros::delay(200);
+
+  // intake
+  setIntake(127);
+  setConveyor(127);
+  chassis.pid_drive_set(11.36, INTAKE_SPEED);
+  chassis.pid_wait();
+  pros::delay(MATCHLOADER_TIME);
+  setIntake(0);
+  setConveyor(0);
+
+  // travel from matchloader to nearby sidegoal, score
+  chassis.pid_drive_set(-21, DRIVE_SPEED);
+  chassis.pid_wait();
+  pneumaticGate.set_value(true);
+  setIntake(127);
+  setConveyor(127);
+  pros::delay(LONG_UNLOAD_TIME);
+  setIntake(0);
+  setConveyor(0);
+
 }
 
-// use for full match: travel to ____ red matchloader, load, then score at nearby sidegoal
+// use for full match: travel to right red matchloader, load, then score at nearby sidegoal
 void match_auton() {
   
   // travel from starting position to matchloader
