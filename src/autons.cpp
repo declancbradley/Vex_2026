@@ -4,7 +4,7 @@
 const int DRIVE_SPEED = 110;
 const int TURN_SPEED = 90;
 const int SWING_SPEED = 110;
-const int INTAKE_SPEED = 80;
+const int INTAKE_SPEED = 75;
 const int MATCHLOADER_TIME = 5000;
 const int LONG_UNLOAD_TIME = 5000;
 
