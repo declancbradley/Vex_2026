@@ -29,12 +29,14 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-    Auton("Left Only Matchloader\n\nUse for competitions", left_matchload_auton),
-    Auton("Right Only Matchloader\n\nUse for competitions", right_matchload_auton),
-    Auton("Full Match\n\nUse for competitions", match_auton),
-    Auton("Match\n\nUse for competitions", bad_auton),
-    Auton("PID Auton Skills\n\nUse for competitions", pid_simple_skills_auton),
-    Auton("Odom Auton Skills\n\nUse for competitions", odom_simple_skills_auton)
+    Auton("Right Only Matchload\n\nUse for match", right_matchload_auton),
+    //Auton("Left Only Preload\n\nOnly scores the preload block", left_preload_auton),
+    //Auton("Right Only Preload\n\nOnly scores the preload block", right_preload_auton),
+    Auton("Left Only Matchload\n\nUse for match", left_matchload_auton),
+    Auton("PID Auton Skills\n\nUse for skills", pid_simple_skills_auton),
+    Auton("Move Forward Once\n\nUse as last resort", bad_auton),
+    //Auton("Full Match\n\nUse for match", prev_match_auton),
+    //Auton("Odom Auton Skills\n\nUse for skills", odom_simple_skills_auton),
   });
 
   // Initialize chassis and auton selector
@@ -69,7 +71,7 @@ void autonomous() {
   chassis.pid_targets_reset();                // Resets PID targets to 0
   chassis.drive_imu_reset();                  // Reset gyro position to 0
   chassis.drive_sensor_reset();               // Reset drive sensors to 0
-  chassis.odom_xyt_set(22.36, 69.77, -90.0); // Set the current position, you can start at a specific position with this
+  chassis.odom_xyt_set(22.36, 69.77, -90.0); // Need to modify starting position for left vs right match auton
   chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
   pneumaticGate.set_value(gate_state);
   pneumaticRod.set_value(rod_state);

@@ -18,10 +18,11 @@ void odom_boomerang_injected_pure_pursuit_example();
 void measure_offsets();
 
 void bad_auton();
+void right_preload_auton();
+void left_preload_auton();
 void right_matchload_auton();
 void left_matchload_auton();
-void park_auton();
-void match_auton();
+void prev_match_auton();
 void pid_simple_skills_auton();
 void odom_simple_skills_auton();
 void prev_skills_auton();
