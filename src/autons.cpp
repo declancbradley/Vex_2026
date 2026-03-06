@@ -5,7 +5,7 @@ const int DRIVE_SPEED = 110;
 const int TURN_SPEED = 90;
 const int SWING_SPEED = 110;
 const int INTAKE_SPEED = 75;
-const int MATCHLOADER_TIME = 5000;
+const int MATCHLOADER_TIME = 3000;
 const int LONG_UNLOAD_TIME = 5000;
 
 ///
@@ -13,8 +13,8 @@ const int LONG_UNLOAD_TIME = 5000;
 ///
 void default_constants() {
   // P (proportional, power), I, D (derivative, brakes), and Start I
-  chassis.pid_drive_constants_set(20.0, 0.0, 100.0);         // Fwd/rev constants, used for odom and non odom motions
-  chassis.pid_heading_constants_set(11.0, 0.0, 20.0);        // Holds the robot straight while going forward without odom
+  chassis.pid_drive_constants_set(11, 0.0, 4);         // Fwd/rev constants, used for odom and non odom motions // 20, 0, 100
+  chassis.pid_heading_constants_set(5, 0.0, 10);        // Holds the robot straight while going forward without odom
   chassis.pid_turn_constants_set(3.0, 0.05, 20.0, 15.0);     // Turn in place constants
   chassis.pid_swing_constants_set(6.0, 0.0, 65.0);           // Swing constants
   chassis.pid_odom_angular_constants_set(6.5, 0.0, 52.5);    // Angular control for odom motions
@@ -609,8 +609,8 @@ void left_preload_auton() {
 void right_matchload_auton() {
   
   // start from right corner of the parking zone, travel to nearby matchloader
-  chassis.odom_xyt_set(22.36, 69.77, -90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
-  chassis.pid_drive_set(31.5, DRIVE_SPEED);
+  chassis.odom_xyt_set(22.36, 69.77, 90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
+  chassis.pid_drive_set(35, DRIVE_SPEED);
   chassis.pid_wait();
   chassis.pid_turn_set(180, TURN_SPEED); // face matchloader
   chassis.pid_wait();
@@ -618,8 +618,8 @@ void right_matchload_auton() {
   pros::delay(200);
 
   // intake
-  setIntake(127);
-  setConveyor(127);
+  setIntake(90);
+  setConveyor(90);
   chassis.pid_drive_set(11.36, INTAKE_SPEED);
   chassis.pid_wait();
   pros::delay(MATCHLOADER_TIME);
@@ -627,10 +627,10 @@ void right_matchload_auton() {
   setConveyor(0);
 
   // travel from matchloader to nearby sidegoal, score
-  chassis.pid_drive_set(-21, DRIVE_SPEED);
+  chassis.pid_drive_set(-29, DRIVE_SPEED);
   chassis.pid_wait();
   pneumaticGate.set_value(true);
-  setIntake(127);
+  setIntake(90);
   setConveyor(127);
   pros::delay(LONG_UNLOAD_TIME);
   setIntake(0);
@@ -642,8 +642,8 @@ void right_matchload_auton() {
 void left_matchload_auton() {
 
   // start from right corner of the parking zone, travel to nearby matchloader
-  chassis.odom_xyt_set(22.36, 69.77, 90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
-  chassis.pid_drive_set(31.5, DRIVE_SPEED);
+  chassis.odom_xyt_set(22.36, 69.77, 270.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
+  chassis.pid_drive_set(35, DRIVE_SPEED);
   chassis.pid_wait();
   chassis.pid_turn_set(180, TURN_SPEED); // face matchloader
   chassis.pid_wait();
@@ -651,8 +651,8 @@ void left_matchload_auton() {
   pros::delay(200);
 
   // intake
-  setIntake(127);
-  setConveyor(127);
+  setIntake(90);
+  setConveyor(90);
   chassis.pid_drive_set(11.36, INTAKE_SPEED);
   chassis.pid_wait();
   pros::delay(MATCHLOADER_TIME);
@@ -660,10 +660,10 @@ void left_matchload_auton() {
   setConveyor(0);
 
   // travel from matchloader to nearby sidegoal, score
-  chassis.pid_drive_set(-21, DRIVE_SPEED);
+  chassis.pid_drive_set(-29, DRIVE_SPEED);
   chassis.pid_wait();
   pneumaticGate.set_value(true);
-  setIntake(127);
+  setIntake(90);
   setConveyor(127);
   pros::delay(LONG_UNLOAD_TIME);
   setIntake(0);
@@ -675,10 +675,10 @@ void left_matchload_auton() {
 void pid_simple_skills_auton() {
   
   // start at top right corner of red parking zone, facing to the right
-  chassis.odom_xyt_set(22.36, 69.77, -90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
+  chassis.odom_xyt_set(0, 0, 90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
   
   // STEP A: travel to nearby blue-top matchloader and get blocks
-  chassis.pid_drive_set(31.5, DRIVE_SPEED);
+  chassis.pid_drive_set(33, DRIVE_SPEED);
   chassis.pid_wait();
   chassis.pid_turn_set(180, TURN_SPEED);
   chassis.pid_wait();
@@ -696,17 +696,17 @@ void pid_simple_skills_auton() {
   chassis.pid_drive_set(-11.36, DRIVE_SPEED);
   chassis.pid_wait();
   pneumaticGate.set_value(true);
-  chassis.pid_turn_set(-90, TURN_SPEED);
+  chassis.pid_turn_set(270_deg, TURN_SPEED);
   chassis.pid_wait();
-  chassis.pid_drive_set(12_in, DRIVE_SPEED); // down
+  chassis.pid_drive_set(18_in, DRIVE_SPEED); // up
   chassis.pid_wait();
-  chassis.pid_turn_set(180_deg, TURN_SPEED);
+  chassis.pid_turn_set(0_deg, TURN_SPEED);
   chassis.pid_wait();
-  chassis.pid_drive_set(-96_in, DRIVE_SPEED); // right (from red side to blue side)
+  chassis.pid_drive_set(96_in, DRIVE_SPEED); // right (from red side to blue side)
   chassis.pid_wait();
-  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_turn_set(90_deg, TURN_SPEED);
   chassis.pid_wait();
-  chassis.pid_drive_set(-12_in, DRIVE_SPEED); // up
+  chassis.pid_drive_set(18_in, DRIVE_SPEED); // down
   chassis.pid_wait();
   chassis.pid_turn_set(0_deg, TURN_SPEED);
   chassis.pid_wait();
@@ -744,7 +744,7 @@ void pid_simple_skills_auton() {
   // STEP E: Park in red zone
   chassis.pid_drive_set(5, DRIVE_SPEED); // right
   chassis.pid_wait();
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_turn_set(270_deg, TURN_SPEED);
   chassis.pid_wait();
   chassis.pid_drive_set(18_in, DRIVE_SPEED); // up
   chassis.pid_wait();
@@ -752,7 +752,7 @@ void pid_simple_skills_auton() {
   chassis.pid_wait();
   chassis.pid_drive_set(100.19, DRIVE_SPEED); // left (from blue side to red side)
   chassis.pid_wait();
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_turn_set(270_deg, TURN_SPEED);
   chassis.pid_wait();
   chassis.pid_drive_set(30, DRIVE_SPEED); // up (entering parking zone)
   chassis.pid_wait();
