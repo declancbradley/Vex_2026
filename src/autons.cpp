@@ -458,6 +458,13 @@ void bad_auton() {
   chassis.pid_wait();
 }
 
+void intake_auton() {
+  setIntake(127);
+  pros::delay(5000);
+  setIntake(0);
+  chassis.pid_wait();
+}
+
 // travel to right red sidegoal and score the one preload block
 void right_preload_auton() {
   chassis.odom_xyt_set(22.36, 69.77, -90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
