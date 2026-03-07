@@ -8,6 +8,9 @@ const int INTAKE_SPEED = 75;
 const int MATCHLOADER_TIME = 3000;
 const int LONG_UNLOAD_TIME = 5000;
 
+const int MATCHLOAD_SLOW_SPEED = 60; // slow velocity when moving into matchloader
+const int MATCHLOAD_FAST_SPEED = 110; // speeds up right as it hits the matchloader
+
 ///
 // Constants
 ///
@@ -510,7 +513,9 @@ void right_matchload_auton() {
   // intake
   setIntake(90);
   setConveyor(90);
-  chassis.pid_drive_set(11.36, INTAKE_SPEED);
+  chassis.pid_drive_set(12_in, MATCHLOAD_SLOW_SPEED);
+  chassis.pid_wait_until(11_in);
+  chassis.pid_speed_max_set(MATCHLOAD_FAST_SPEED);
   chassis.pid_wait();
   pros::delay(MATCHLOADER_TIME);
   setIntake(0);
@@ -543,7 +548,9 @@ void left_matchload_auton() {
   // intake
   setIntake(90);
   setConveyor(90);
-  chassis.pid_drive_set(11.36, INTAKE_SPEED);
+  chassis.pid_drive_set(12_in, MATCHLOAD_SLOW_SPEED);
+  chassis.pid_wait_until(11_in);
+  chassis.pid_speed_max_set(MATCHLOAD_FAST_SPEED);
   chassis.pid_wait();
   pros::delay(MATCHLOADER_TIME);
   setIntake(0);
@@ -576,7 +583,10 @@ void pid_simple_skills_auton() {
   pros::delay(200);
   setIntake(127);
   setConveyor(127);
-  chassis.pid_drive_set(11.36, INTAKE_SPEED); //figure out how to stop even if exact distance doesn't get reached
+
+  chassis.pid_drive_set(12_in, MATCHLOAD_SLOW_SPEED);
+  chassis.pid_wait_until(11_in);
+  chassis.pid_speed_max_set(MATCHLOAD_FAST_SPEED);
   chassis.pid_wait();
   pros::delay(MATCHLOADER_TIME);
   setIntake(0);
@@ -615,7 +625,13 @@ void pid_simple_skills_auton() {
   pros::delay(200);
   setIntake(127);
   setConveyor(127);
-  chassis.pid_drive_set(25.7, INTAKE_SPEED);
+  
+  chassis.pid_drive_set(13.7, DRIVE_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(12_in, MATCHLOAD_SLOW_SPEED);
+  chassis.pid_wait_until(11_in);
+  chassis.pid_speed_max_set(MATCHLOAD_FAST_SPEED);
   chassis.pid_wait();
   pros::delay(MATCHLOADER_TIME);
   setIntake(0);
