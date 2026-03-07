@@ -502,8 +502,8 @@ void left_preload_auton() {
 void right_matchload_auton() {
   
   // start from right corner of the parking zone, travel to nearby matchloader
-  chassis.odom_xyt_set(22.36, 69.77, 90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
-  chassis.pid_drive_set(35, DRIVE_SPEED);
+  chassis.odom_xyt_set(0.0, 0.0, 90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
+  chassis.pid_drive_set(33, DRIVE_SPEED);
   chassis.pid_wait();
   chassis.pid_turn_set(180, TURN_SPEED); // face matchloader
   chassis.pid_wait();
@@ -514,7 +514,7 @@ void right_matchload_auton() {
   setIntake(90);
   setConveyor(90);
   chassis.pid_drive_set(12_in, MATCHLOAD_SLOW_SPEED);
-  chassis.pid_wait_until(11_in);
+  chassis.pid_wait_until(10_in);
   chassis.pid_speed_max_set(MATCHLOAD_FAST_SPEED);
   chassis.pid_wait();
   pros::delay(MATCHLOADER_TIME);
@@ -537,8 +537,8 @@ void right_matchload_auton() {
 void left_matchload_auton() {
 
   // start from right corner of the parking zone, travel to nearby matchloader
-  chassis.odom_xyt_set(22.36, 69.77, 270.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
-  chassis.pid_drive_set(35, DRIVE_SPEED);
+  chassis.odom_xyt_set(0.0, 0.0, 270.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
+  chassis.pid_drive_set(33, DRIVE_SPEED);
   chassis.pid_wait();
   chassis.pid_turn_set(180, TURN_SPEED); // face matchloader
   chassis.pid_wait();
@@ -549,7 +549,7 @@ void left_matchload_auton() {
   setIntake(90);
   setConveyor(90);
   chassis.pid_drive_set(12_in, MATCHLOAD_SLOW_SPEED);
-  chassis.pid_wait_until(11_in);
+  chassis.pid_wait_until(10_in);
   chassis.pid_speed_max_set(MATCHLOAD_FAST_SPEED);
   chassis.pid_wait();
   pros::delay(MATCHLOADER_TIME);
