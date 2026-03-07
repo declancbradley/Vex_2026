@@ -571,7 +571,7 @@ void prev_match_auton() {
 
 // Use this when nothing else works. The bot simply moves forward 1 square.
 void bad_auton() {
-  chassis.pid_drive_set(1_in, DRIVE_SPEED);
+  chassis.pid_drive_set(24_in, DRIVE_SPEED);
   chassis.pid_wait();
 }
 
