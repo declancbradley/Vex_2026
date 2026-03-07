@@ -27,3 +27,4 @@ void prev_match_auton();
 void pid_simple_skills_auton();
 void odom_simple_skills_auton();
 void prev_skills_auton();
+void test_matchload_auton();

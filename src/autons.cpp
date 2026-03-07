@@ -468,6 +468,30 @@ void intake_auton() {
   chassis.pid_wait();
 }
 
+void test_matchload_auton() {
+  
+  // start from right corner of the parking zone, travel to nearby matchloader
+  chassis.odom_xyt_set(0.0, 0.0, 90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
+  chassis.pid_drive_set(33, DRIVE_SPEED);
+  chassis.pid_wait();
+  chassis.pid_turn_set(180, TURN_SPEED); // face matchloader
+  chassis.pid_wait();
+  pneumaticGate.set_value(false);
+  pros::delay(200);
+
+  // intake
+  setIntake(90);
+  setConveyor(90);
+  chassis.pid_drive_set(12_in, MATCHLOAD_SLOW_SPEED);
+  chassis.pid_wait_until(10_in);
+  chassis.pid_speed_max_set(MATCHLOAD_FAST_SPEED);
+  chassis.pid_wait();
+  pros::delay(MATCHLOADER_TIME);
+  setIntake(0);
+  setConveyor(0);
+
+}
+
 // travel to right red sidegoal and score the one preload block
 void right_preload_auton() {
   chassis.odom_xyt_set(22.36, 69.77, -90.0); // horizontal line from red parking zone to blue is 0 degrees, position doesn't matter for PID
